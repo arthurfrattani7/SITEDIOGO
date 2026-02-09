@@ -1,0 +1,27 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DomainModule = void 0;
+const common_1 = require("@nestjs/common");
+const data_module_1 = require("../data/data.module");
+const user_domain_1 = require("./services/user.domain");
+const user_Validate_1 = require("../validate/services/user.Validate");
+const posts_domain_1 = require("./services/posts.domain");
+const categories_domain_1 = require("./services/categories.domain");
+const comments_domain_1 = require("./services/comments.domain");
+let DomainModule = class DomainModule {
+};
+exports.DomainModule = DomainModule;
+exports.DomainModule = DomainModule = __decorate([
+    (0, common_1.Module)({
+        imports: [data_module_1.DataModule],
+        providers: [user_domain_1.UserDomain, user_Validate_1.UserValidate, posts_domain_1.PostDomain, categories_domain_1.CategoryDomain, comments_domain_1.CommentDomain],
+        exports: [user_domain_1.UserDomain, user_Validate_1.UserValidate, posts_domain_1.PostDomain, categories_domain_1.CategoryDomain, comments_domain_1.CommentDomain],
+    })
+], DomainModule);
+//# sourceMappingURL=domain.module.js.map
