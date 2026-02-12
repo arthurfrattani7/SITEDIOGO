@@ -9,19 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserRequestDto = void 0;
+exports.LoginRequestDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-class CreateUserRequestDto {
+class LoginRequestDto {
 }
-exports.CreateUserRequestDto = CreateUserRequestDto;
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: "Diogo Gonçalves",
-        description: "Nome completo do utilizador",
-    }),
-    __metadata("design:type", String)
-], CreateUserRequestDto.prototype, "name", void 0);
+exports.LoginRequestDto = LoginRequestDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: "email@email.com",
@@ -30,7 +23,7 @@ __decorate([
     (0, class_validator_1.IsEmail)({}, { message: "O formato do e-mail é inválido" }),
     (0, class_validator_1.IsNotEmpty)({ message: "O e-mail é obrigatório" }),
     __metadata("design:type", String)
-], CreateUserRequestDto.prototype, "email", void 0);
+], LoginRequestDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: "senha123",
@@ -40,5 +33,5 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: "A senha é obrigatória" }),
     (0, class_validator_1.MinLength)(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
     __metadata("design:type", String)
-], CreateUserRequestDto.prototype, "password", void 0);
-//# sourceMappingURL=createUserRequestDto.js.map
+], LoginRequestDto.prototype, "password", void 0);
+//# sourceMappingURL=loginRequestDto.js.map

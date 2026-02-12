@@ -3,6 +3,7 @@ import { UserResponseDto } from 'presentation/dto/response/userResponse.dto';
 import { CreateUserRequestDto } from 'presentation/dto/request/createUserRequestDto';
 import { UpdateUserRequestDto } from 'presentation/dto/request/updateUserRequestDto';
 import { VerifyUserRequestDto } from 'presentation/dto/request/verifyUserRequestDto';
+import { LoginRequestDto } from 'presentation/dto/request/loginRequestDto';
 export declare class UserController {
     private readonly userApplication;
     constructor(userApplication: UserApplication);
@@ -15,5 +16,13 @@ export declare class UserController {
     }>;
     verify(dto: VerifyUserRequestDto): Promise<{
         message: string;
+    }>;
+    login(dto: LoginRequestDto): Promise<{
+        user: {
+            id: number;
+            name: string;
+            email: string;
+        };
+        access_token: string;
     }>;
 }

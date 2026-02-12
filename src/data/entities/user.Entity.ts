@@ -7,5 +7,6 @@ export class UserEntity {
   isVerified: boolean;
   verificationCodeHash?: string;
   verificationExpiredAt?: Date;
+  password: string
   // Nota: Adicionar taxId, updatedAt, etc. (Como estou correndo, estou fazendo de maneira rapida)
 } 

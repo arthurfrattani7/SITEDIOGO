@@ -5,10 +5,10 @@ export declare class PostValidate {
     isValidCategory(categorieId: number): Promise<void>;
     isValidPost(id: number): Promise<{
         id: number;
-        content: string;
         title: string;
-        publication_date: Date | null;
+        content: string;
         authorId: number;
         categorieId: number;
+        publication_date: Date | null;
     }>;
 }

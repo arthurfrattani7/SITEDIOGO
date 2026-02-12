@@ -51,11 +51,14 @@ const emailTransporter_1 = require("../../data/providers/mailServices/emailTrans
 const emailContent_model_1 = require("../../data/providers/mailServices/emailContent.model");
 const date_fns_1 = require("date-fns");
 const code_1 = require("../../util/code");
+const jwt_1 = require("@nestjs/jwt");
+const common_2 = require("@nestjs/common");
 let UserApplication = class UserApplication {
-    constructor(userDomain, userValidate, sendingMail) {
+    constructor(userDomain, userValidate, sendingMail, jwtService) {
         this.userDomain = userDomain;
         this.userValidate = userValidate;
         this.sendingMail = sendingMail;
+        this.jwtService = jwtService;
     }
     async getAllUsers() {
         return await this.userDomain.getAllUsers();
@@ -73,21 +76,23 @@ let UserApplication = class UserApplication {
         const codeHash = await bcrypt.hash(code, 10);
         const expiredAt = (0, date_fns_1.addHours)(new Date(), 2);
         if (userExists) {
-            throw new common_1.BadRequestException('O e-mail informado já está sendo utilizado por outra conta.');
+            throw new common_1.BadRequestException("O e-mail informado já está sendo utilizado por outra conta.");
         }
         const userData = {
             name: dto.name,
             email: dto.email,
             password: hashedPassword,
-            type: 'leitor',
+            type: "leitor",
             verificationCodeHash: codeHash,
             verificationExpiredAt: expiredAt,
         };
         const newUser = await this.userDomain.create(userData);
         const contentEmail = [
-            new emailContent_model_1.EmailContent(`<h2>Bem-vindo ao Blog do Diogo! Seu código de ativação é: ${code}</h2>`, 'Blog Diogo- Ative sua conta', [newUser.email]),
+            new emailContent_model_1.EmailContent(`<h2>Bem-vindo ao Blog do Diogo! Seu código de ativação é: ${code}</h2>`, "Blog Diogo- Ative sua conta", [newUser.email]),
         ];
-        this.sendingMail.sendEmailList(contentEmail).catch(err => console.error("Erro e-mail:", err));
+        this.sendingMail
+            .sendEmailList(contentEmail)
+            .catch((err) => console.error("Erro e-mail:", err));
         return newUser;
     }
     async updateUser(id, dto) {
@@ -101,7 +106,7 @@ let UserApplication = class UserApplication {
     async deleteUser(id) {
         await this.userValidate.isValidUser(id);
         const deleteContract = {
-            userId: id
+            userId: id,
         };
         return await this.userDomain.deleteUser(deleteContract);
     }
@@ -115,24 +120,24 @@ let UserApplication = class UserApplication {
             verificationExpiredAt: expiredAt,
         });
         const contentEmail = [
-            new emailContent_model_1.EmailContent(`<h2>Seu código BlogDiogo ${code}</h2>`, 'Blog Diogo - Código de Verificação', [email]),
+            new emailContent_model_1.EmailContent(`<h2>Seu código BlogDiogo ${code}</h2>`, "Blog Diogo - Código de Verificação", [email]),
         ];
         await this.sendingMail.sendEmailList(contentEmail);
     }
     async verifyAccount(dto) {
         const user = await this.userDomain.getByEmail(dto.email);
         if (!user) {
-            throw new common_1.BadRequestException('Usuário não encontrado.');
+            throw new common_1.BadRequestException("Usuário não encontrado.");
         }
         if (user.isVerified) {
-            throw new common_1.BadRequestException('Esta conta já foi verificada anteriormente.');
+            throw new common_1.BadRequestException("Esta conta já foi verificada anteriormente.");
         }
         if (user.verificationExpiredAt && new Date() > user.verificationExpiredAt) {
-            throw new common_1.BadRequestException('O código de verificação expirou. Solicite um novo código.');
+            throw new common_1.BadRequestException("O código de verificação expirou. Solicite um novo código.");
         }
-        const isMatch = await bcrypt.compare(dto.code, user.verificationCodeHash || '');
+        const isMatch = await bcrypt.compare(dto.code, user.verificationCodeHash || "");
         if (!isMatch) {
-            throw new common_1.BadRequestException('Código de verificação inválido.');
+            throw new common_1.BadRequestException("Código de verificação inválido.");
         }
         await this.userDomain.updateUser(user.id, {
             isVerified: true,
@@ -140,12 +145,35 @@ let UserApplication = class UserApplication {
             verificationExpiredAt: null,
         });
     }
+    async login(dto) {
+        const user = await this.userDomain.getByEmail(dto.email);
+        if (!user) {
+            throw new common_2.UnauthorizedException("E-mail ou senha incorretos.");
+        }
+        if (!user.isVerified) {
+            throw new common_2.UnauthorizedException("Esta conta ainda não foi verificada. Verifique o seu e-mail.");
+        }
+        const isMatch = await bcrypt.compare(dto.password, user.password);
+        if (!isMatch) {
+            throw new common_2.UnauthorizedException("E-mail ou senha incorretos.");
+        }
+        const payload = { sub: user.id, email: user.email, type: user.type };
+        return {
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+            },
+            access_token: await this.jwtService.signAsync(payload),
+        };
+    }
 };
 exports.UserApplication = UserApplication;
 exports.UserApplication = UserApplication = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [user_domain_1.UserDomain,
         user_Validate_1.UserValidate,
-        emailTransporter_1.MailProvider])
+        emailTransporter_1.MailProvider,
+        jwt_1.JwtService])
 ], UserApplication);
 //# sourceMappingURL=user.Application.js.map

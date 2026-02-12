@@ -15,14 +15,35 @@ const posts_Application_1 = require("./applications/posts.Application");
 const categories_Application_1 = require("./applications/categories.Application");
 const comment_Application_1 = require("./applications/comment.Application");
 const data_module_1 = require("../data/data.module");
+const jwt_1 = require("@nestjs/jwt");
 let ApplicationModule = class ApplicationModule {
 };
 exports.ApplicationModule = ApplicationModule;
 exports.ApplicationModule = ApplicationModule = __decorate([
     (0, common_1.Module)({
-        imports: [domain_module_1.DomainModule, validate_module_1.ValidateModule, data_module_1.DataModule],
-        providers: [user_Application_1.UserApplication, posts_Application_1.PostApplication, categories_Application_1.CategoryApplication, comment_Application_1.CommentApplication],
-        exports: [user_Application_1.UserApplication, posts_Application_1.PostApplication, categories_Application_1.CategoryApplication, comment_Application_1.CommentApplication],
+        imports: [
+            domain_module_1.DomainModule,
+            validate_module_1.ValidateModule,
+            data_module_1.DataModule,
+            jwt_1.JwtModule.register({
+                global: true,
+                secret: process.env.JWT_SECRET,
+                signOptions: { expiresIn: "1d" },
+            }),
+        ],
+        providers: [
+            user_Application_1.UserApplication,
+            posts_Application_1.PostApplication,
+            categories_Application_1.CategoryApplication,
+            comment_Application_1.CommentApplication,
+        ],
+        exports: [
+            user_Application_1.UserApplication,
+            posts_Application_1.PostApplication,
+            categories_Application_1.CategoryApplication,
+            comment_Application_1.CommentApplication,
+            jwt_1.JwtModule,
+        ],
     })
 ], ApplicationModule);
 //# sourceMappingURL=application.module.js.map

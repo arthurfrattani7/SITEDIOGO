@@ -7,4 +7,5 @@ export declare class UserEntity {
     isVerified: boolean;
     verificationCodeHash?: string;
     verificationExpiredAt?: Date;
+    password: string;
 }

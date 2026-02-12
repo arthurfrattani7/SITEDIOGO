@@ -20,6 +20,7 @@ const userResponse_dto_1 = require("../dto/response/userResponse.dto");
 const createUserRequestDto_1 = require("../dto/request/createUserRequestDto");
 const updateUserRequestDto_1 = require("../dto/request/updateUserRequestDto");
 const verifyUserRequestDto_1 = require("../dto/request/verifyUserRequestDto");
+const loginRequestDto_1 = require("../dto/request/loginRequestDto");
 let UserController = class UserController {
     constructor(userApplication) {
         this.userApplication = userApplication;
@@ -50,6 +51,9 @@ let UserController = class UserController {
     async verify(dto) {
         await this.userApplication.verifyAccount(dto);
         return { message: 'Sua conta FolhaMax foi verificada com sucesso!' };
+    }
+    async login(dto) {
+        return await this.userApplication.login(dto);
     }
 };
 exports.UserController = UserController;
@@ -103,6 +107,14 @@ __decorate([
     __metadata("design:paramtypes", [verifyUserRequestDto_1.VerifyUserRequestDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verify", null);
+__decorate([
+    (0, common_1.Post)('login'),
+    (0, swagger_1.ApiOperation)({ summary: 'Realiza o login e retorna o token JWT' }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [loginRequestDto_1.LoginRequestDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "login", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('users'),
     (0, swagger_1.ApiTags)('Users'),

@@ -14,12 +14,9 @@ export interface ICreateUserData {
     verificationExpiredAt?: Date;
 }
 export interface IUpdateUserData {
-  name?: string;
-  password?: string;
-  email?: string;
-  isVerified?: boolean;
-  verificationCodeHash?: string | null;
-  verificationExpiredAt?: Date | null;
+    name?: string;
+    password?: string;
+    email?: string;
 }
 export interface IDeleteUser {
     userId: number;
