@@ -3,6 +3,10 @@ import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestj
 import { PostApplication } from 'application/applications/posts.Application';
 import { CreatePostRequestDto } from 'presentation/dto/request/createPostsRequestDto';
 import { PostResponseDto } from '../dto/response/postResponse.dto';
+import { JwtAuthGuard} from 'application/guards/jwtAuth.Guard';
+import { RolesGuard } from 'application/guards/roles.Guard';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from 'application/decorators/rolesDecorator';
 
 @Controller('posts')
 @ApiTags('Posts')
@@ -18,6 +22,8 @@ export class PostController {
 
   @Post()
   @ApiOperation({ summary: 'Cria uma nova notícia (público para leitura, restrito na lógica)' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('autor', 'admin') // Leitores são barrados aqui, mesmo que tenham um token válido. Apenas autores e admins podem criar posts.
   @ApiCreatedResponse({ 
     description: 'Notícia criada com sucesso.',
     type: PostResponseDto 

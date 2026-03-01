@@ -17,6 +17,7 @@ export class MapperRepository {
     user.id = dto.id;
     user.name = dto.name;
     user.email = dto.email;
+    user.password = dto.password;
     user.type = dto.type as 'leitor' | 'autor' | 'admin';
     user.data_criacao = dto.data_criacao;
     user.isVerified = dto.isVerified;

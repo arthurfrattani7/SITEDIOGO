@@ -4,6 +4,8 @@ import { CommentApplication } from '../../application/applications/comment.Appli
 import { CreateCommentRequestDto } from '../dto/request/createCommentRequestDto';
 import { CommentResponseDto } from '../dto/response/commentResponse.dto';
 import { UpdateCommentRequestDto } from 'presentation/dto/request/updateCommentsRequestDto';
+import { JwtAuthGuard } from 'application/guards/jwtAuth.Guard';
+import { UseGuards } from '@nestjs/common';
 
 @ApiTags('Comments')
 @Controller('comments')
@@ -12,6 +14,7 @@ export class CommentController {
 
   @Post()
   @ApiOperation({ summary: 'Cria um novo comentário em um post' })
+  @UseGuards(JwtAuthGuard) // Não precisa de RolesGuard, pois qualquer logado comenta
   @ApiCreatedResponse({ 
     description: 'Comentário criado com sucesso.',
     type: CommentResponseDto 

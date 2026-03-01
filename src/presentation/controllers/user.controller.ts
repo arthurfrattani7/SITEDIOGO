@@ -5,6 +5,7 @@ import { UserResponseDto } from 'presentation/dto/response/userResponse.dto';
 import { CreateUserRequestDto } from 'presentation/dto/request/createUserRequestDto';
 import { UpdateUserRequestDto } from 'presentation/dto/request/updateUserRequestDto';
 import { VerifyUserRequestDto } from 'presentation/dto/request/verifyUserRequestDto';
+import { LoginRequestDto } from 'presentation/dto/request/loginRequestDto';
 
 @Controller('users')
 @ApiTags('Users')
@@ -63,5 +64,11 @@ export class UserController {
   async verify(@Body() dto: VerifyUserRequestDto) {
     await this.userApplication.verifyAccount(dto);
     return { message: 'Sua conta FolhaMax foi verificada com sucesso!' };
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Realiza o login e retorna o token JWT' })
+  async login(@Body() dto: LoginRequestDto) {
+    return await this.userApplication.login(dto);
   }
 }
