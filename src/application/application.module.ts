@@ -7,16 +7,22 @@ import { CategoryApplication } from "./applications/categories.Application";
 import { CommentApplication } from "./applications/comment.Application";
 import { DataModule } from "../data/data.module";
 import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
     DomainModule,
     ValidateModule,
     DataModule,
-    JwtModule.register({
-      global: true, // Torna o JwtService disponível em toda a aplicação
-      secret: process.env.JWT_SECRET, // simplesmente pegar da env 
-      signOptions: { expiresIn: "1d" }, // Expira em um dia! 
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>("JWTSECRET"),
+        signOptions: {
+          expiresIn: configService.get<number>("JWT_EXPIRES_IN") || 86400,
+        },
+      }),
     }),
   ],
   providers: [

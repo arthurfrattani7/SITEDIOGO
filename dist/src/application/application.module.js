@@ -16,6 +16,7 @@ const categories_Application_1 = require("./applications/categories.Application"
 const comment_Application_1 = require("./applications/comment.Application");
 const data_module_1 = require("../data/data.module");
 const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
 let ApplicationModule = class ApplicationModule {
 };
 exports.ApplicationModule = ApplicationModule;
@@ -25,10 +26,15 @@ exports.ApplicationModule = ApplicationModule = __decorate([
             domain_module_1.DomainModule,
             validate_module_1.ValidateModule,
             data_module_1.DataModule,
-            jwt_1.JwtModule.register({
-                global: true,
-                secret: process.env.JWT_SECRET,
-                signOptions: { expiresIn: "1d" },
+            jwt_1.JwtModule.registerAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => ({
+                    secret: configService.get("JWTSECRET"),
+                    signOptions: {
+                        expiresIn: configService.get("JWT_EXPIRES_IN") || 86400,
+                    },
+                }),
             }),
         ],
         providers: [
