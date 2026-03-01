@@ -18,6 +18,10 @@ const swagger_1 = require("@nestjs/swagger");
 const posts_Application_1 = require("../../application/applications/posts.Application");
 const createPostsRequestDto_1 = require("../dto/request/createPostsRequestDto");
 const postResponse_dto_1 = require("../dto/response/postResponse.dto");
+const jwtAuth_Guard_1 = require("../../application/guards/jwtAuth.Guard");
+const roles_Guard_1 = require("../../application/guards/roles.Guard");
+const common_2 = require("@nestjs/common");
+const rolesDecorator_1 = require("../../application/decorators/rolesDecorator");
 let PostController = class PostController {
     constructor(postApplication) {
         this.postApplication = postApplication;
@@ -41,6 +45,8 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Cria uma nova notícia (público para leitura, restrito na lógica)' }),
+    (0, common_2.UseGuards)(jwtAuth_Guard_1.JwtAuthGuard, roles_Guard_1.RolesGuard),
+    (0, rolesDecorator_1.Roles)('autor', 'admin'),
     (0, swagger_1.ApiCreatedResponse)({
         description: 'Notícia criada com sucesso.',
         type: postResponse_dto_1.PostResponseDto

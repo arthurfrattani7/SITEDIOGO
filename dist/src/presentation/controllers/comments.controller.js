@@ -19,6 +19,8 @@ const comment_Application_1 = require("../../application/applications/comment.Ap
 const createCommentRequestDto_1 = require("../dto/request/createCommentRequestDto");
 const commentResponse_dto_1 = require("../dto/response/commentResponse.dto");
 const updateCommentsRequestDto_1 = require("../dto/request/updateCommentsRequestDto");
+const jwtAuth_Guard_1 = require("../../application/guards/jwtAuth.Guard");
+const common_2 = require("@nestjs/common");
 let CommentController = class CommentController {
     constructor(commentApplication) {
         this.commentApplication = commentApplication;
@@ -41,6 +43,7 @@ exports.CommentController = CommentController;
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Cria um novo comentário em um post' }),
+    (0, common_2.UseGuards)(jwtAuth_Guard_1.JwtAuthGuard),
     (0, swagger_1.ApiCreatedResponse)({
         description: 'Comentário criado com sucesso.',
         type: commentResponse_dto_1.CommentResponseDto
