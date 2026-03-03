@@ -1,15 +1,16 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { PostApplication } from 'application/applications/posts.Application';
 import { CreatePostRequestDto } from 'presentation/dto/request/createPostsRequestDto';
 import { PostResponseDto } from '../dto/response/postResponse.dto';
-import { JwtAuthGuard} from 'application/guards/jwtAuth.Guard';
+import { JwtAuthGuard } from 'application/guards/jwtAuth.Guard';
 import { RolesGuard } from 'application/guards/roles.Guard';
-import { UseGuards } from '@nestjs/common';
 import { Roles } from 'application/decorators/rolesDecorator';
+import { RequestWithUser } from 'data/interfaces/IRequestWithUser.Interface';
 
-@Controller('posts')
+@ApiBearerAuth() // <--- ADICIONE ISTO para liberar o cadeado no Swagger
 @ApiTags('Posts')
+@Controller('posts')
 export class PostController {
   constructor(private readonly postApplication: PostApplication) {}
 
@@ -21,15 +22,19 @@ export class PostController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Cria uma nova notícia (público para leitura, restrito na lógica)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('autor', 'admin') // Leitores são barrados aqui, mesmo que tenham um token válido. Apenas autores e admins podem criar posts.
-  @ApiCreatedResponse({ 
-    description: 'Notícia criada com sucesso.',
-    type: PostResponseDto 
-  })
-  async create(@Body() createPostDto: CreatePostRequestDto): Promise<PostResponseDto> {
-    // O Controller passa o DTO para a Application, que o valida como ICreatePost
-    return await this.postApplication.createPost(createPostDto);
+  @Roles('autor', 'admin')
+  @ApiBearerAuth()
+  async create(
+    @Body() createPostDto: CreatePostRequestDto, 
+    @Request() req: RequestWithUser 
+  ): Promise<PostResponseDto> {
+    
+    const authorId = req.user.sub;
+
+    return await this.postApplication.createPost({
+      ...createPostDto,
+      authorId: authorId 
+      });
+    }
   }
-}

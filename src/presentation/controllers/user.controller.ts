@@ -75,7 +75,7 @@ export class UserController {
   async login(@Body() dto: LoginRequestDto) {
     return await this.userApplication.login(dto);
   }
-
+ 
 @Patch(':id/changeType')
 @ApiOperation({ summary: 'Altera o cargo do utilizador (Leitor, Autor ou Admin)' })
 @UseGuards(JwtAuthGuard) 
