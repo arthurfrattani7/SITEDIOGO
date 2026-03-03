@@ -6,7 +6,11 @@ import { CommentResponseDto } from '../dto/response/commentResponse.dto';
 import { UpdateCommentRequestDto } from 'presentation/dto/request/updateCommentsRequestDto';
 import { JwtAuthGuard } from 'application/guards/jwtAuth.Guard';
 import { UseGuards } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { RolesGuard } from 'application/guards/roles.Guard';
+import { Roles } from 'application/decorators/rolesDecorator';
 
+@ApiBearerAuth()
 @ApiTags('Comments')
 @Controller('comments')
 export class CommentController {
@@ -14,7 +18,8 @@ export class CommentController {
 
   @Post()
   @ApiOperation({ summary: 'Cria um novo comentário em um post' })
-  @UseGuards(JwtAuthGuard) // Não precisa de RolesGuard, pois qualquer logado comenta
+  @UseGuards(JwtAuthGuard, RolesGuard) // Não precisa de RolesGuard, pois qualquer logado comenta
+  @Roles('autor', 'admin', 'leitor') // Todos os tipos de usuário podem comentar
   @ApiCreatedResponse({ 
     description: 'Comentário criado com sucesso.',
     type: CommentResponseDto 
