@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestj
 import { CategoryApplication } from 'application/applications/categories.Application';
 import { CreateCategoryRequestDto } from 'presentation/dto/request/createCategoryRequestDto';
 import { CategoryResponseDto } from 'presentation/dto/response/createResponse.dto';
+import { Roles } from 'application/decorators/rolesDecorator';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -18,6 +19,7 @@ export class CategoryController {
 
   @Post()
   @ApiOperation({ summary: 'Cria uma nova categoria' })
+  @Roles('admin')
   @ApiCreatedResponse({ 
     description: 'Categoria criada com sucesso.',
     type: CategoryResponseDto 
