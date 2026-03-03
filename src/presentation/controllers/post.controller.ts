@@ -8,7 +8,7 @@ import { RolesGuard } from 'application/guards/roles.Guard';
 import { Roles } from 'application/decorators/rolesDecorator';
 import { RequestWithUser } from 'data/interfaces/IRequestWithUser.Interface';
 
-@ApiBearerAuth() // <--- ADICIONE ISTO para liberar o cadeado no Swagger
+@ApiBearerAuth()
 @ApiTags('Posts')
 @Controller('posts')
 export class PostController {
