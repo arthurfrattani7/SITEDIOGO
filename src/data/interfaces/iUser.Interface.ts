@@ -18,6 +18,7 @@ export interface IUpdateUserData {
   name?: string;
   password?: string;
   email?: string;
+  type?: 'leitor' | 'autor' | 'admin';
 }
 
 export interface IDeleteUser {

@@ -202,4 +202,14 @@ export class UserApplication {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  async updateUserType(id: number, newType: 'leitor' | 'autor' | 'admin') {
+    await this.userValidate.isValidUser(id);
+
+  const updateData: IUpdateUserData = {
+    type: newType,
+  };
+
+  return await this.userDomain.updateUser(id, updateData);
+  }
 }
