@@ -18,8 +18,8 @@ export class CommentController {
 
   @Post()
   @ApiOperation({ summary: 'Cria um novo comentário em um post' })
-  @UseGuards(JwtAuthGuard, RolesGuard) // Não precisa de RolesGuard, pois qualquer logado comenta
-  @Roles('autor', 'admin', 'leitor') // Todos os tipos de usuário podem comentar
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('autor', 'admin', 'leitor')
   @ApiCreatedResponse({ 
     description: 'Comentário criado com sucesso.',
     type: CommentResponseDto 
