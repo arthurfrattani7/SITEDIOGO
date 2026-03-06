@@ -18,6 +18,7 @@ async function bootstrap() {
     .setDescription("Documentação das rotas do blog")
     .setVersion("1.0")
     .addTag("Users")
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

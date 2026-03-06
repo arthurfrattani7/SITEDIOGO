@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
 
 export class LoginRequestDto {
   @ApiProperty({
-    example: "email@email.com",
+    example: "viniciusdiller@hotmail.com",
     description: "Email único para acesso",
   })
   @IsEmail({}, { message: "O formato do e-mail é inválido" })
@@ -11,7 +11,7 @@ export class LoginRequestDto {
   email: string;
 
   @ApiProperty({
-    example: "senha123",
+    example: "123456",
     description: "Senha da conta do utilizador",
   })
   @IsString()

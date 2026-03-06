@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Post,Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post,Body, Put, Delete, Patch, UseGuards } from '@nestjs/common';
 import { UserApplication } from '../../application/applications/user.Application';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { UserResponseDto } from 'presentation/dto/response/userResponse.dto';
@@ -6,8 +6,12 @@ import { CreateUserRequestDto } from 'presentation/dto/request/createUserRequest
 import { UpdateUserRequestDto } from 'presentation/dto/request/updateUserRequestDto';
 import { VerifyUserRequestDto } from 'presentation/dto/request/verifyUserRequestDto';
 import { LoginRequestDto } from 'presentation/dto/request/loginRequestDto';
+import { JwtAuthGuard } from 'application/guards/jwtAuth.Guard';
+import { UpdateTypeRequestDto } from 'presentation/dto/request/updateTypeRequestDto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiBearerAuth()
 @ApiTags('Users')
 export class UserController {
   constructor(private readonly userApplication: UserApplication) {}
@@ -71,4 +75,16 @@ export class UserController {
   async login(@Body() dto: LoginRequestDto) {
     return await this.userApplication.login(dto);
   }
+ 
+@Patch(':id/changeType')
+@ApiOperation({ summary: 'Altera o cargo do utilizador (Leitor, Autor ou Admin)' })
+@UseGuards(JwtAuthGuard) 
+async changeType(@Param('id') id: string, @Body() dto: UpdateTypeRequestDto) 
+{
+  await this.userApplication.updateUserType(+id, dto.type);
+  
+  return { 
+    message: `O utilizador ${id} agora é um ${dto.type}.` 
+  };
+}
 }

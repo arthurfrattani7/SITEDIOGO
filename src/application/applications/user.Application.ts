@@ -17,6 +17,7 @@ import { VerifyUserRequestDto } from "presentation/dto/request/verifyUserRequest
 import { JwtService } from "@nestjs/jwt";
 import { LoginRequestDto } from "presentation/dto/request/loginRequestDto";
 import { UnauthorizedException } from "@nestjs/common";
+import { LoginResponseDto } from "presentation/dto/response/loginResponse.dto";
 
 @Injectable()
 export class UserApplication {
@@ -174,7 +175,7 @@ export class UserApplication {
     } as IUpdateUserData);
   }
 
-  async login(dto: LoginRequestDto) {
+  async login(dto: LoginRequestDto): Promise<LoginResponseDto> {
     const user = await this.userDomain.getByEmail(dto.email);
     if (!user) {
       throw new UnauthorizedException("E-mail ou senha incorretos.");
@@ -198,8 +199,19 @@ export class UserApplication {
         id: user.id,
         name: user.name,
         email: user.email,
+        type: user.type,
       },
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async updateUserType(id: number, newType: 'leitor' | 'autor' | 'admin') {
+    await this.userValidate.isValidUser(id);
+
+  const updateData: IUpdateUserData = {
+    type: newType,
+  };
+
+  return await this.userDomain.updateUser(id, updateData);
   }
 }

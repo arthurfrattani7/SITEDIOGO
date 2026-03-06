@@ -3,6 +3,13 @@ import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestj
 import { CategoryApplication } from 'application/applications/categories.Application';
 import { CreateCategoryRequestDto } from 'presentation/dto/request/createCategoryRequestDto';
 import { CategoryResponseDto } from 'presentation/dto/response/createResponse.dto';
+import { Roles } from 'application/decorators/rolesDecorator';
+import { RolesGuard } from 'application/guards/roles.Guard';
+import { JwtAuthGuard } from 'application/guards/jwtAuth.Guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { UseGuards } from '@nestjs/common';
+
+@ApiBearerAuth()
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -18,6 +25,8 @@ export class CategoryController {
 
   @Post()
   @ApiOperation({ summary: 'Cria uma nova categoria' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   @ApiCreatedResponse({ 
     description: 'Categoria criada com sucesso.',
     type: CategoryResponseDto 
