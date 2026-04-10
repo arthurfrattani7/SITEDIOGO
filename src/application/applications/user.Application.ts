@@ -205,13 +205,20 @@ export class UserApplication {
     };
   }
 
-  async updateUserType(id: number, newType: 'leitor' | 'autor' | 'admin') {
+  async updateUserType(id: number, newType: "leitor" | "autor" | "admin") {
     await this.userValidate.isValidUser(id);
 
-  const updateData: IUpdateUserData = {
-    type: newType,
-  };
+    const updateData: IUpdateUserData = {
+      type: newType,
+    };
 
-  return await this.userDomain.updateUser(id, updateData);
+    return await this.userDomain.updateUser(id, updateData);
+  }
+
+  async resendCodeByEmail(email: string): Promise<void> {
+    const user = await this.userDomain.getByEmail(email);
+    if (!user) throw new BadRequestException("Usuário não encontrado.");
+
+    await this.requestVerificationCode(user.id, user.email);
   }
 }
