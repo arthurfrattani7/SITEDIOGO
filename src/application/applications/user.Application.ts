@@ -18,6 +18,8 @@ import { JwtService } from "@nestjs/jwt";
 import { LoginRequestDto } from "presentation/dto/request/loginRequestDto";
 import { UnauthorizedException } from "@nestjs/common";
 import { LoginResponseDto } from "presentation/dto/response/loginResponse.dto";
+import { ResetPasswordRequestDto } from "presentation/dto/request/resetPasswordRequestDto";
+import { UserApplicationMapper } from "application/mapping/changePassword.mapping";
 
 @Injectable()
 export class UserApplication {
@@ -26,6 +28,7 @@ export class UserApplication {
     private userValidate: UserValidate,
     private sendingMail: MailProvider,
     private jwtService: JwtService,
+    private userApplicationMapper: UserApplicationMapper,
   ) {}
 
   // Orquestra a listagem de todos os utilizadores.
@@ -220,5 +223,29 @@ export class UserApplication {
     if (!user) throw new BadRequestException("Usuário não encontrado.");
 
     await this.requestVerificationCode(user.id, user.email);
+  }
+
+  async resetPassword(dto: ResetPasswordRequestDto): Promise<void> {
+    const user = await this.userDomain.getByEmail(dto.email);
+    if (!user) throw new BadRequestException("Utilizador não encontrado.");
+
+    // Validação do código (bcrypt compare)
+    const isMatch = await bcrypt.compare(
+      dto.code,
+      user.verificationCodeHash || "",
+    );
+    if (!isMatch)
+      throw new BadRequestException("Código de verificação inválido.");
+
+    if (user.verificationExpiredAt && new Date() > user.verificationExpiredAt) {
+      throw new BadRequestException("O código de verificação expirou.");
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    const updateData =
+      this.userApplicationMapper.toResetPasswordUpdate(hashedPassword);
+
+    await this.userDomain.updateUser(user.id, updateData);
   }
 }

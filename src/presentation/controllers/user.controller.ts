@@ -26,6 +26,7 @@ import { JwtAuthGuard } from "application/guards/jwtAuth.Guard";
 import { UpdateTypeRequestDto } from "presentation/dto/request/updateTypeRequestDto";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { ResendCodeRequestDto } from "presentation/dto/request/resendCodeRequestDto";
+import { ResetPasswordRequestDto } from "presentation/dto/request/resetPasswordRequestDto";
 
 @Controller("users")
 @ApiBearerAuth()
@@ -114,5 +115,15 @@ export class UserController {
   async resendCode(@Body() dto: ResendCodeRequestDto) {
     await this.userApplication.resendCodeByEmail(dto.email);
     return { message: "Um novo código foi enviado para o seu e-mail." };
+  }
+
+  @Post("reset-password")
+  @ApiOperation({
+    summary:
+      "Redefine a senha do utilizador usando o código enviado por e-mail",
+  })
+  async resetPassword(@Body() dto: ResetPasswordRequestDto) {
+    await this.userApplication.resetPassword(dto);
+    return { message: "Sua senha foi alterada com sucesso!" };
   }
 }
