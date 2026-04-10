@@ -110,14 +110,14 @@ export class UserController {
     };
   }
 
-  @Post("resend-code")
+  @Post("resendCode")
   @ApiOperation({ summary: "Reenvia o código de verificação" })
   async resendCode(@Body() dto: ResendCodeRequestDto) {
     await this.userApplication.resendCodeByEmail(dto.email);
     return { message: "Um novo código foi enviado para o seu e-mail." };
   }
 
-  @Post("reset-password")
+  @Post("resetPassword")
   @ApiOperation({
     summary:
       "Redefine a senha do utilizador usando o código enviado por e-mail",
