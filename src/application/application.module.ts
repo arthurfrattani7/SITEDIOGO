@@ -8,6 +8,7 @@ import { CommentApplication } from "./applications/comment.Application";
 import { DataModule } from "../data/data.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { UserApplicationMapper } from "./mapping/changePassword.mapping";
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
     PostApplication,
     CategoryApplication,
     CommentApplication,
+    UserApplicationMapper,
   ],
   exports: [
     UserApplication,
@@ -37,6 +39,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
     CategoryApplication,
     CommentApplication,
     JwtModule,
+    UserApplicationMapper,
   ],
 })
 export class ApplicationModule {}
