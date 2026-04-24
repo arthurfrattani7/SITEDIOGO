@@ -2,9 +2,9 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PostValidate } from 'validate/services/post.Validate';
 import { CommentDomain } from 'domain/services/comments.domain';
 import { ICreateCommentData, IDeleteComment, IUpdateCommentData } from 'data/interfaces/IComments.Interface';
-import { CreateCommentRequestDto } from 'presentation/dto/request/createCommentRequestDto';
+import { CreateCommentRequestDto } from 'presentation/dto/request/comment/createCommentRequestDto';
 import { CommentValidate } from 'validate/services/comments.Validate';
-import { UpdateCommentRequestDto } from 'presentation/dto/request/updateCommentsRequestDto';
+import { UpdateCommentRequestDto } from 'presentation/dto/request/comment/updateCommentsRequestDto';
 
 
 @Injectable()

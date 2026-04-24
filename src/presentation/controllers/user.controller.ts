@@ -18,9 +18,9 @@ import {
   ApiOkResponse,
 } from "@nestjs/swagger";
 import { UserResponseDto } from "presentation/dto/response/userResponse.dto";
-import { CreateUserRequestDto } from "presentation/dto/request/createUserRequestDto";
-import { UpdateUserRequestDto } from "presentation/dto/request/updateUserRequestDto";
-import { VerifyUserRequestDto } from "presentation/dto/request/verifyUserRequestDto";
+import { CreateUserRequestDto } from "presentation/dto/request/users/createUserRequestDto";
+import { UpdateUserRequestDto } from "presentation/dto/request/users/updateUserRequestDto";
+import { VerifyUserRequestDto } from "presentation/dto/request/users/verifyUserRequestDto";
 import { LoginRequestDto } from "presentation/dto/request/loginRequestDto";
 import { JwtAuthGuard } from "application/guards/jwtAuth.Guard";
 import { UpdateTypeRequestDto } from "presentation/dto/request/updateTypeRequestDto";

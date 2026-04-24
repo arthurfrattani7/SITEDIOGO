@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, Put } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { CommentApplication } from '../../application/applications/comment.Application';
-import { CreateCommentRequestDto } from '../dto/request/createCommentRequestDto';
+import { CreateCommentRequestDto } from '../dto/request/comment/createCommentRequestDto';
 import { CommentResponseDto } from '../dto/response/commentResponse.dto';
-import { UpdateCommentRequestDto } from 'presentation/dto/request/updateCommentsRequestDto';
+import { UpdateCommentRequestDto } from 'presentation/dto/request/comment/updateCommentsRequestDto';
 import { JwtAuthGuard } from 'application/guards/jwtAuth.Guard';
 import { UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
