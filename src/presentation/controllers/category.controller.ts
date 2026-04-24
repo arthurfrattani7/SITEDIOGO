@@ -14,7 +14,7 @@ import {
   ApiOkResponse,
 } from "@nestjs/swagger";
 import { CategoryApplication } from "application/applications/categories.Application";
-import { CreateCategoryRequestDto } from "presentation/dto/request/createCategoryRequestDto";
+import { CreateCategoryRequestDto } from "presentation/dto/request/category/createCategoryRequestDto";
 import { CategoryResponseDto } from "presentation/dto/response/createResponse.dto";
 import { Roles } from "application/decorators/rolesDecorator";
 import { RolesGuard } from "application/guards/roles.Guard";

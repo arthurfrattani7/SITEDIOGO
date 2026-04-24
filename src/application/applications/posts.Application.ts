@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PostDomain } from "domain/services/posts.domain";
 import { UserValidate } from "../../validate/services/user.Validate";
-import { ICreatePost } from "data/interfaces/IPost.Interface";
+import { ICreatePost, IUpdatePost } from "data/interfaces/IPost.Interface";
 import { PostValidate } from "validate/services/post.Validate";
 
 @Injectable()
@@ -33,5 +33,21 @@ export class PostApplication {
     await this.postValidate.isValidCategory(dto.categorieId);
 
     return await this.postDomain.create(dto);
+  }
+
+  async updatePost(id: number, dto: Partial<IUpdatePost>) { 
+    await this.postValidate.isValidPost(id);
+
+    await this.userValidate.canUserUpdate(dto.authorId);
+
+    await this.postValidate.isValidCategory(dto.categorieId);
+
+    return await this.postDomain.update(id, dto);
+  }
+
+ async deletePost(id: number) {
+    await this.postValidate.isValidPost(id);
+    
+    return await this.postDomain.delete(id);
   }
 }

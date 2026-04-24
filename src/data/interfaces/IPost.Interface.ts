@@ -4,3 +4,5 @@ export interface ICreatePost {
   authorId: number;
   categorieId: number;
 }
+
+export interface IUpdatePost extends ICreatePost {}

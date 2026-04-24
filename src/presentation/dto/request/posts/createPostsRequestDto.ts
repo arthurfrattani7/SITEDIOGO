@@ -13,3 +13,5 @@ export class CreatePostRequestDto {
   @ApiProperty({ example: 2 })
   categorieId: number;
 }
+
+export class UpdatePostRequestDto extends CreatePostRequestDto {}
