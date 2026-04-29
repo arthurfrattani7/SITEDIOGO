@@ -69,8 +69,13 @@ export class PostController {
   async update(
     @Param("id") id: string,
     @Body() updatePostDto: UpdatePostRequestDto,
+    @Request() req: RequestWithUser,
   ): Promise<PostResponseDto> {
-    return await this.postApplication.updatePost(Number(id), updatePostDto);
+    const authorId = req.user.sub;
+    return await this.postApplication.updatePost(Number(id), {
+      ...updatePostDto,
+      authorId: authorId,
+    });
   }
 
   @Delete(":id")
