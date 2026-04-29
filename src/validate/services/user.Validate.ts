@@ -37,4 +37,37 @@ export class UserValidate {
     return true;
   }
 
+  async canUserUpdate(userId: number) {
+    const user = await this.db.users.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new BadRequestException ('Usuário não encontrado.');
+    }
+
+    // Bloqueia se o tipo for 'leitor'
+    if (user.type === 'leitor') {
+      throw new BadRequestException('Acesso negado.');
+    }
+    
+    return true;
+  }
+
+  async canUserDelete(userId: number) {
+    const user = await this.db.users.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new BadRequestException ('Usuário não encontrado.');
+    }
+
+    // Bloqueia se o tipo for 'leitor'
+    if (user.type === 'leitor') {
+      throw new BadRequestException('Acesso negado.');
+    }
+    
+    return true;
+  }
 }

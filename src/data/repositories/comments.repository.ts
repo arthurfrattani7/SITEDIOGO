@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../providers/db/prisma.Service';
-import { ICreateCommentData, IUpdateCommentData, IDeleteComment } from 'data/interfaces/IComments.Interface';
-import { CommentEntity } from 'data/entities/comments.Entity';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "../providers/db/prisma.Service";
+import {
+  ICreateCommentData,
+  IUpdateCommentData,
+  IDeleteComment,
+} from "data/interfaces/IComments.Interface";
+import { CommentEntity } from "data/entities/comments.Entity";
 
 @Injectable()
 export class CommentRepository {
@@ -20,10 +24,10 @@ export class CommentRepository {
   async findByPost(postId: number) {
     return await this.db.comments.findMany({
       where: { postId },
-      include: { 
-        users: { select: { name: true } }
+      include: {
+        users: { select: { name: true } },
       },
-      orderBy: { commentDate: 'desc' },
+      orderBy: { commentDate: "desc" },
     });
   }
 
@@ -32,11 +36,20 @@ export class CommentRepository {
   }
 
   async update(id: number, data: IUpdateCommentData): Promise<CommentEntity> {
-  return await this.db.comments.update({
-    where: { id },
-    data: {
-      text: data.text,
-    },
-  });
-}
+    return await this.db.comments.update({
+      where: { id },
+      data: {
+        text: data.text,
+      },
+    });
+  }
+
+  async findAll(): Promise<CommentEntity[]> {
+    return await this.db.comments.findMany({
+      include: {
+        users: { select: { name: true } },
+      },
+      orderBy: { commentDate: "desc" },
+    });
+  }
 }

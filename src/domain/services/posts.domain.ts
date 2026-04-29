@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PostRepository } from 'data/repositories/posts.repository';
-import { ICreatePost } from 'data/interfaces/IPost.Interface';
+import { ICreatePost, IUpdatePost } from 'data/interfaces/IPost.Interface';
 
 @Injectable()
 export class PostDomain {
@@ -16,5 +16,13 @@ export class PostDomain {
 
   public async create(data: ICreatePost) {
     return await this.postRepository.create(data);
+  }
+
+  public async update(id: number, data: Partial<IUpdatePost>) {
+    return await this.postRepository.update(id, data);
+  }
+
+  public async delete(id: number) {
+    await this.postRepository.delete(id);
   }
 }

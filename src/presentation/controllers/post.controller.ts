@@ -6,16 +6,20 @@ import {
   UseGuards,
   Request,
   Param,
+  Patch,
+  Delete,
 } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiBearerAuth,
 } from "@nestjs/swagger";
 import { PostApplication } from "application/applications/posts.Application";
-import { CreatePostRequestDto } from "presentation/dto/request/createPostsRequestDto";
+import {
+  CreatePostRequestDto,
+  UpdatePostRequestDto,
+} from "presentation/dto/request/posts/createPostsRequestDto";
 import { PostResponseDto } from "../dto/response/postResponse.dto";
 import { JwtAuthGuard } from "application/guards/jwtAuth.Guard";
 import { RolesGuard } from "application/guards/roles.Guard";
@@ -56,5 +60,24 @@ export class PostController {
       ...createPostDto,
       authorId: authorId,
     });
+  }
+
+  @Patch(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("autor", "admin")
+  @ApiOperation({ summary: "Atualiza um post existente" })
+  async update(
+    @Param("id") id: string,
+    @Body() updatePostDto: UpdatePostRequestDto,
+  ): Promise<PostResponseDto> {
+    return await this.postApplication.updatePost(Number(id), updatePostDto);
+  }
+
+  @Delete(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("admin", "autor")
+  @ApiOperation({ summary: "Exclui um post" })
+  async remove(@Param("id") id: string): Promise<void> {
+    return await this.postApplication.deletePost(Number(id));
   }
 }
