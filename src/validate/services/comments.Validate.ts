@@ -1,5 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../data/providers/db/prisma.Service';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { PrismaService } from "../../data/providers/db/prisma.Service";
 
 @Injectable()
 export class CommentValidate {
@@ -17,7 +21,11 @@ export class CommentValidate {
     return comment;
   }
 
-  async verifyOwnership(commentId: number, requesterId: number) {
+  async verifyOwnership(
+    commentId: number,
+    requesterId: number,
+    requesterType?: string,
+  ) {
     const comment = await this.db.comments.findUnique({
       where: { id: commentId },
     });
@@ -26,9 +34,10 @@ export class CommentValidate {
       throw new NotFoundException(`Comentário ${commentId} não encontrado.`);
     }
 
-    // Se o ID de quem pede não for o ID de quem escreveu, bloqueia!
-    if (comment.userId !== requesterId) {
-      throw new BadRequestException('Você não tem permissão para modificar este comentário.');
+    if (comment.userId !== requesterId && requesterType !== "admin") {
+      throw new BadRequestException(
+        "Você não tem permissão para modificar este comentário.",
+      );
     }
 
     return comment;

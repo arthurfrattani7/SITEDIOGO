@@ -7,6 +7,7 @@ import {
   Delete,
   ParseIntPipe,
   Put,
+  Request,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -23,6 +24,7 @@ import { UseGuards } from "@nestjs/common";
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { RolesGuard } from "application/guards/roles.Guard";
 import { Roles } from "application/decorators/rolesDecorator";
+import { RequestWithUser } from "data/interfaces/IRequestWithUser.Interface";
 
 @ApiBearerAuth()
 @ApiTags("Comments")
@@ -57,28 +59,39 @@ export class CommentController {
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("admin", "autor", "leitor")
+  @ApiBearerAuth()
   @ApiOperation({ summary: "Remove um comentário pelo ID" })
   @ApiOkResponse({ description: "Comentário removido com sucesso." })
-  async remove(@Param("id", ParseIntPipe) id: number) {
-    await this.commentApplication.deleteComment(id);
+  async remove(
+    @Param("id", ParseIntPipe) id: number,
+    @Request() req: RequestWithUser,
+  ) {
+    const requesterId = req.user.sub;
+    const requesterType = req.user.type;
+    await this.commentApplication.deleteComment(id, requesterId, requesterType);
     return { message: "Comentário deletado com sucesso!" };
   }
 
-  @Put(":id/:userId") // userId na rota apenas para teste manual, depois tem que adicionar o JWT para a segurança (OBS: PESQUISAR COMO FAZER ISSO E PERGUNTAR A DIOGO SE VAI SER NECESSÁRIO, MAS ACREDITO QUE SIM!)
+  @Put(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("autor", "admin", "leitor")
   @ApiOperation({
     summary: "Edita um comentário (Apenas o autor pode fazer isso)",
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Param("userId", ParseIntPipe) userId: number,
     @Body() dto: UpdateCommentRequestDto,
+    @Request() req: RequestWithUser,
   ) {
-    return await this.commentApplication.updateComment(id, userId, dto);
+    const requesterId = req.user.sub;
+    return await this.commentApplication.updateComment(id, requesterId, dto);
   }
 
   @Get()
   @ApiOperation({ summary: "Lista todos os comentários do blog" })
-  @ApiOkResponse ({
+  @ApiOkResponse({
     description: "Lista de comentários retornada com sucesso.",
     type: [CommentResponseDto],
   })
