@@ -1,18 +1,21 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PostValidate } from 'validate/services/post.Validate';
-import { CommentDomain } from 'domain/services/comments.domain';
-import { ICreateCommentData, IDeleteComment, IUpdateCommentData } from 'data/interfaces/IComments.Interface';
-import { CreateCommentRequestDto } from 'presentation/dto/request/comment/createCommentRequestDto';
-import { CommentValidate } from 'validate/services/comments.Validate';
-import { UpdateCommentRequestDto } from 'presentation/dto/request/comment/updateCommentsRequestDto';
-
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { PostValidate } from "validate/services/post.Validate";
+import { CommentDomain } from "domain/services/comments.domain";
+import {
+  ICreateCommentData,
+  IDeleteComment,
+  IUpdateCommentData,
+} from "data/interfaces/IComments.Interface";
+import { CreateCommentRequestDto } from "presentation/dto/request/comment/createCommentRequestDto";
+import { CommentValidate } from "validate/services/comments.Validate";
+import { UpdateCommentRequestDto } from "presentation/dto/request/comment/updateCommentsRequestDto";
 
 @Injectable()
 export class CommentApplication {
   constructor(
     private readonly commentDomain: CommentDomain,
-    private readonly postValidate: PostValidate, 
-    private readonly commentValidate: CommentValidate
+    private readonly postValidate: PostValidate,
+    private readonly commentValidate: CommentValidate,
   ) {}
 
   async createComment(dto: CreateCommentRequestDto) {
@@ -25,37 +28,38 @@ export class CommentApplication {
     };
 
     return await this.commentDomain.create(contract);
-     }
+  }
 
   async listCommentsByPost(postId: number) {
     // Opcional: validar se o post existe antes de listar os comentários
     await this.postValidate.isValidPost(postId);
     return await this.commentDomain.getByPost(postId);
-    }   
+  }
 
-  async deleteComment(id: number) {
-  // Validação: O comentário existe?
-  await this.commentValidate.isValidComment(id);
+  async deleteComment(id: number, requesterId: number, requesterType: string) {
+    await this.commentValidate.verifyOwnership(id, requesterId);
 
-  // Mapeamento: Criar o contrato para o Domínio
-  const contract: IDeleteComment = { 
-    commentId: id 
-     };
+    const contract: IDeleteComment = {
+      commentId: id,
+    };
 
-  // Execução
-  return await this.commentDomain.deleteComment(contract);
-    }
+    return await this.commentDomain.deleteComment(contract);
+  }
 
- async updateComment(commentId: number, requesterId: number, dto: UpdateCommentRequestDto) {
-  // A trava de segurança: Só passa se for o dono
-  await this.commentValidate.verifyOwnership(commentId, requesterId);
+  async updateComment(
+    commentId: number,
+    requesterId: number,
+    dto: UpdateCommentRequestDto,
+  ) {
+    // A trava de segurança: Só passa se for o dono
+    await this.commentValidate.verifyOwnership(commentId, requesterId);
 
-  // Mapeamento para o Domínio
-  const updateData: IUpdateCommentData = {
-    text: dto.text,
-  };
+    // Mapeamento para o Domínio
+    const updateData: IUpdateCommentData = {
+      text: dto.text,
+    };
 
-  return await this.commentDomain.updateComment(commentId, updateData);
+    return await this.commentDomain.updateComment(commentId, updateData);
   }
 
   async listAllComments() {
