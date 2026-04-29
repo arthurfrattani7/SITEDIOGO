@@ -57,4 +57,8 @@ export class CommentApplication {
 
   return await this.commentDomain.updateComment(commentId, updateData);
   }
+
+  async listAllComments() {
+    return await this.commentDomain.getAllComments();
+  }
 }

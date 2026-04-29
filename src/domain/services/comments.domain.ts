@@ -24,4 +24,8 @@ export class CommentDomain {
   public async updateComment(id: number, data: IUpdateCommentData) {
   return await this.commentRepository.update(id, data);
   }
+
+  public async getAllComments() {
+    return await this.commentRepository.findAll();
+  }
 }
