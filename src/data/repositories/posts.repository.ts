@@ -31,6 +31,7 @@ export class PostRepository {
         content: data.content,
         authorId: data.authorId,
         categorieId: data.categorieId,
+        imageUrl: data.imageUrl,
       },
     });
     return this.mapper.post(postDb);
@@ -47,6 +48,7 @@ export class PostRepository {
         content: data.content,
         authorId: data.authorId,
         categorieId: data.categorieId,
+        imageUrl: data.imageUrl,
       },
     });
     return this.mapper.post(postDb);

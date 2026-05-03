@@ -31,7 +31,6 @@ export class CommentApplication {
   }
 
   async listCommentsByPost(postId: number) {
-    // Opcional: validar se o post existe antes de listar os comentários
     await this.postValidate.isValidPost(postId);
     return await this.commentDomain.getByPost(postId);
   }
@@ -51,10 +50,8 @@ export class CommentApplication {
     requesterId: number,
     dto: UpdateCommentRequestDto,
   ) {
-    // A trava de segurança: Só passa se for o dono
     await this.commentValidate.verifyOwnership(commentId, requesterId);
 
-    // Mapeamento para o Domínio
     const updateData: IUpdateCommentData = {
       text: dto.text,
     };

@@ -47,6 +47,7 @@ model posts {
   publication_date DateTime?  @default(now()) @db.DateTime(0)
   authorId         Int
   categorieId      Int
+  imageUrl         String?      @db.VarChar(500)
   comments         comments[]
   users            users      @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
   categories       categories @relation(fields: [categorieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_2")

@@ -16,7 +16,7 @@
     "strictBindCallApply": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    // Adicione ou garanta que esta linha esteja como false para aceitar os imports/exports
-    "verbatimModuleSyntax": false 
+    "verbatimModuleSyntax": false, 
+    "types": ["node", "multer"]
   }
 }

@@ -5,4 +5,5 @@ export class PostEntity {
   publicationDate: Date;
   authorId: number;
   categorieId: number;
+  imageUrl?: string;
 }

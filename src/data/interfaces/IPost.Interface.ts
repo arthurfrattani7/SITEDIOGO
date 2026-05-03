@@ -3,6 +3,7 @@ export interface ICreatePost {
   content: string;
   authorId: number;
   categorieId: number;
+  imageUrl?: string;
 }
 
 export interface IUpdatePost extends ICreatePost {}

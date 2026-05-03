@@ -238,7 +238,6 @@ export class UserApplication {
     const user = await this.userDomain.getByEmail(dto.email);
     if (!user) throw new BadRequestException("Utilizador não encontrado.");
 
-    // Validação do código (bcrypt compare)
     const isMatch = await bcrypt.compare(
       dto.code,
       user.verificationCodeHash || "",
