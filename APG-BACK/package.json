@@ -1,11 +1,10 @@
 {
-  "name": "sitediogo",
+  "name": "SITEDIOGO",
   "version": "1.0.0",
-  "main": "dist/main.js",
+  "main": "index.js",
   "license": "MIT",
-"scripts": {
-    "postinstall": "prisma generate",
-    "build": "prisma generate && nest build",
+  "scripts": {
+    "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -18,7 +17,6 @@
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/multer": "^2.1.0",
     "@types/node": "^25.0.3",
     "@types/nodemailer": "^7.0.9",
     "@types/passport-jwt": "^4.0.1",
