@@ -63,8 +63,6 @@ export class MapperRepository {
     courseEntity.modules = course.modules;
     courseEntity.level = course.level;
     courseEntity.hotmartLink = course.hotmartLink;
-
-    // 100% Tipado: O compilador sabe que 'b' é do tipo ICourseBenefitFromDb
     courseEntity.benefits = course.benefits
       ? course.benefits.map((b) => b.text)
       : [];

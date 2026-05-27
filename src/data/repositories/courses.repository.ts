@@ -25,4 +25,23 @@ export class CoursesRepository {
     });
     return this.mapper.course(courseDb);
   }
+
+  async create(data: Omit<CourseEntity, "id">): Promise<CourseEntity> {
+    const courseDb = await this.db.course.create({
+      data: {
+        title: data.title,
+        bgClass: data.bgClass,
+        description: data.description,
+        duration: data.duration,
+        modules: data.modules,
+        level: data.level,
+        hotmartLink: data.hotmartLink,
+        benefits: {
+          create: data.benefits.map((text) => ({ text })), // Cria os registros automáticos na tabela 'CourseBenefit'
+        },
+      },
+      include: { benefits: true },
+    });
+    return this.mapper.course(courseDb);
+  }
 }
