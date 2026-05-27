@@ -8,3 +8,5 @@ export interface ICreateCourseData {
   benefits: string[];
   hotmartLink: string;
 }
+
+export interface IUpdateCourseData extends ICreateCourseData {}

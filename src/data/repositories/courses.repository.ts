@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { MapperRepository } from "data/mapper/entityMapper";
 import { PrismaService } from "../providers/db/prisma.Service";
 import { CourseEntity } from "data/entities/course.Entity";
+import { ICourseFromDb } from "data/mapper/interface";
 
 @Injectable()
 export class CoursesRepository {
@@ -39,6 +40,32 @@ export class CoursesRepository {
         benefits: {
           create: data.benefits.map((text) => ({ text })),
         },
+      },
+      include: { benefits: true },
+    });
+    return this.mapper.course(courseDb);
+  }
+
+  async update(
+    id: string,
+    data: Partial<Omit<CourseEntity, "id">>,
+  ): Promise<CourseEntity> {
+    const courseDb = await this.db.course.update({
+      where: { id },
+      data: {
+        title: data.title,
+        bgClass: data.bgClass,
+        description: data.description,
+        duration: data.duration,
+        modules: data.modules,
+        level: data.level,
+        hotmartLink: data.hotmartLink,
+        ...(data.benefits && {
+          benefits: {
+            deleteMany: {},
+            create: data.benefits.map((text) => ({ text })),
+          },
+        }),
       },
       include: { benefits: true },
     });

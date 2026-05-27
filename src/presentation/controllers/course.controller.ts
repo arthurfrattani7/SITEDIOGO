@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { Controller, Post, UseGuards, Param, Get, Body } from "@nestjs/common";
+import { Controller, Post, UseGuards, Param, Get, Body, Put } from "@nestjs/common";
 import { CoursesApplication } from "application/applications/courses.Application";
 import { CourseResponseDto } from "presentation/dto/response/courseResponse.dto";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
@@ -7,6 +7,7 @@ import { CreateCourseRequestDto } from "presentation/dto/request/course/createCu
 import { Roles } from "application/decorators/rolesDecorator";
 import { RolesGuard } from "application/guards/roles.Guard";
 import { JwtAuthGuard } from "application/guards/jwtAuth.Guard";
+import { UpdatedCourseRequestDto } from "presentation/dto/request/course/updatedCurseRequestDto";
 @ApiBearerAuth()
 @ApiTags("Courses")
 @Controller("courses")
@@ -36,13 +37,37 @@ export class CourseController {
     return this.courseApplication.getCourseById(id);
   }
 
- @Post()
+  @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles("admin")
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Criar um novo curso' })
-  @ApiResponse({ status: 201, description: 'Curso criado com sucesso.', type: CourseResponseDto })
-  async create(@Body() createCourseDto: CreateCourseRequestDto): Promise<CourseResponseDto> {
+  @ApiOperation({ summary: "Criar um novo curso" })
+  @ApiResponse({
+    status: 201,
+    description: "Curso criado com sucesso.",
+    type: CourseResponseDto,
+  })
+  async create(
+    @Body() createCourseDto: CreateCourseRequestDto,
+  ): Promise<CourseResponseDto> {
     return this.courseApplication.createCourse(createCourseDto);
+  }
+
+  @Put(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("admin")
+  @ApiBearerAuth()
+  @ApiOperation({ summary: "Atualizar um curso existente" })
+  @ApiResponse({
+    status: 200,
+    description: "Curso atualizado com sucesso.",
+    type: CourseResponseDto,
+  })
+  @ApiResponse({ status: 404, description: "Curso não encontrado." })
+  async update(
+    @Param("id") id: string,
+    @Body() updateCourseDto: UpdatedCourseRequestDto,
+  ): Promise<CourseResponseDto> {
+    return this.courseApplication.updateCourse(id, updateCourseDto);
   }
 }

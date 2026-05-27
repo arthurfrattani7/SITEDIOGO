@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ICreateCourseData } from "application/interfaces/ICourseData.application";
+import { ICreateCourseData, IUpdateCourseData } from "application/interfaces/ICourseData.application";
 import { CoursesDomain } from "domain/services/courses.domain";
 import { CourseResponseDto } from "presentation/dto/response/courseResponse.dto";
 
@@ -17,5 +17,9 @@ export class CoursesApplication {
 
   async createCourse(data: ICreateCourseData): Promise<CourseResponseDto> {
     return await this.courses.createCourse(data);
+  }
+
+  async updateCourse(id: string, data: Partial<IUpdateCourseData>): Promise<CourseResponseDto> {
+    return await this.courses.updateCourse(id, data);
   }
 }

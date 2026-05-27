@@ -17,4 +17,11 @@ export class CoursesDomain {
   async createCourse(data: CourseEntity): Promise<CourseEntity> {
     return await this.coursesRepository.create(data);
   }
+
+  async updateCourse(
+    id: string,
+    data: Partial<Omit<CourseEntity, "id">>,
+  ): Promise<CourseEntity> {
+    return await this.coursesRepository.update(id, data);
+  }
 }
