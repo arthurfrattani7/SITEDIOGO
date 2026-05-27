@@ -55,7 +55,6 @@ export class MapperRepository {
     if (!course) return null;
 
     const courseEntity = new CourseEntity();
-    courseEntity.id = course.id;
     courseEntity.title = course.title;
     courseEntity.bgClass = course.bgClass;
     courseEntity.description = course.description;

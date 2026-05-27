@@ -4,9 +4,7 @@ import { CoursesRepository } from "data/repositories/courses.repository";
 
 @Injectable()
 export class CoursesDomain {
-  constructor(
-    private readonly coursesRepository: CoursesRepository,
-  ) {}
+  constructor(private readonly coursesRepository: CoursesRepository) {}
 
   async getAllCourses(): Promise<CourseEntity[]> {
     return await this.coursesRepository.findAll();
@@ -14,5 +12,9 @@ export class CoursesDomain {
 
   async getCourseById(id: string): Promise<CourseEntity> {
     return await this.coursesRepository.findById(id);
+  }
+
+  async createCourse(data: CourseEntity): Promise<CourseEntity> {
+    return await this.coursesRepository.create(data);
   }
 }

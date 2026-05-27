@@ -5,7 +5,7 @@ export class CourseResponseDto {
     example: '8f3b2a1a-4c5d-4e6f-8a7b-9c0d1e2f3a4b', 
     description: 'ID único do curso (UUID gerado pelo banco)' 
   })
-  id: string;
+  id?: string;
 
   @ApiProperty({ 
     example: 'Curso Completo de Direito Administrativo', 

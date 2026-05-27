@@ -1,4 +1,4 @@
-export class CourseEntity {
+export interface ICreateCourseData {
   title: string;
   bgClass: string;
   description: string;

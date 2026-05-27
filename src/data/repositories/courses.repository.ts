@@ -26,7 +26,7 @@ export class CoursesRepository {
     return this.mapper.course(courseDb);
   }
 
-  async create(data: Omit<CourseEntity, "id">): Promise<CourseEntity> {
+  async create(data: CourseEntity): Promise<CourseEntity> {
     const courseDb = await this.db.course.create({
       data: {
         title: data.title,
@@ -37,7 +37,7 @@ export class CoursesRepository {
         level: data.level,
         hotmartLink: data.hotmartLink,
         benefits: {
-          create: data.benefits.map((text) => ({ text })), // Cria os registros automáticos na tabela 'CourseBenefit'
+          create: data.benefits.map((text) => ({ text })),
         },
       },
       include: { benefits: true },
