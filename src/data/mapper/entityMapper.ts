@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { UserEntity } from "data/entities/user.Entity";
-import { IToUserEntity } from "./interface";
+import { ICourseFromDb, IToUserEntity } from "./interface";
 import { PostEntity } from "data/entities/post.Entity";
 import { posts, categories } from "@prisma/client";
 import { CategoryEntity } from "data/entities/categories.Entity";
+import { CourseEntity } from "data/entities/course.Entity";
 
 @Injectable()
 export class MapperRepository {
@@ -48,5 +49,23 @@ export class MapperRepository {
     category.name = dto.name;
 
     return category;
+  }
+
+ course(course: ICourseFromDb | null): CourseEntity | null {
+    if (!course) return null;
+
+    const courseEntity = new CourseEntity();
+    courseEntity.title = course.title;
+    courseEntity.bgClass = course.bgClass;
+    courseEntity.description = course.description;
+    courseEntity.duration = course.duration;
+    courseEntity.modules = course.modules;
+    courseEntity.level = course.level;
+    courseEntity.hotmartLink = course.hotmartLink;
+    courseEntity.benefits = course.benefits
+      ? course.benefits.map((b) => b.text)
+      : [];
+
+    return courseEntity;
   }
 }
