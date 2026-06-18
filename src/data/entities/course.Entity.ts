@@ -1,4 +1,5 @@
 export class CourseEntity {
+  id?: string;
   title: string;
   bgClass: string;
   description: string;
