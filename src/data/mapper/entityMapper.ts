@@ -51,10 +51,11 @@ export class MapperRepository {
     return category;
   }
 
- course(course: ICourseFromDb | null): CourseEntity | null {
+  course(course: ICourseFromDb | null): CourseEntity | null {
     if (!course) return null;
 
     const courseEntity = new CourseEntity();
+    courseEntity.id = course.id;
     courseEntity.title = course.title;
     courseEntity.bgClass = course.bgClass;
     courseEntity.description = course.description;
