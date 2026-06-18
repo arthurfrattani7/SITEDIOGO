@@ -51,21 +51,21 @@ export class MapperRepository {
     return category;
   }
 
- course(course: ICourseFromDb | null): CourseEntity | null {
+  course(course: ICourseFromDb | null): CourseEntity | null {
     if (!course) return null;
 
-    const courseEntity = new CourseEntity();
-    courseEntity.title = course.title;
-    courseEntity.bgClass = course.bgClass;
-    courseEntity.description = course.description;
-    courseEntity.duration = course.duration;
-    courseEntity.modules = course.modules;
-    courseEntity.level = course.level;
-    courseEntity.hotmartLink = course.hotmartLink;
-    courseEntity.benefits = course.benefits
-      ? course.benefits.map((b) => b.text)
-      : [];
-
-    return courseEntity;
+    return new CourseEntity(
+      {
+        title: course.title,
+        bgClass: course.bgClass,
+        description: course.description,
+        duration: course.duration,
+        modules: course.modules,
+        level: course.level,
+        benefits: course.benefits ? course.benefits.map((b) => b.text) : [],
+        hotmartLink: course.hotmartLink,
+      },
+      course.id,
+    );
   }
 }

@@ -1,12 +1,5 @@
-export interface ICreateCourseData {
-  title: string;
-  bgClass: string;
-  description: string;
-  duration: string;
-  modules: number;
-  level: string;
-  benefits: string[];
-  hotmartLink: string;
-}
+import { CourseEntity } from '../../data/entities/course.Entity';
 
-export interface IUpdateCourseData extends ICreateCourseData {}
+export type ICreateCourseData = Omit<CourseEntity, 'id'>;
+
+export type IUpdateCourseData = Partial<Omit<CourseEntity, 'id'>>;

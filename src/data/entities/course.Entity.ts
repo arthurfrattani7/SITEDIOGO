@@ -1,10 +1,32 @@
-export class CourseEntity {
-  title: string;
-  bgClass: string;
-  description: string;
-  duration: string;
-  modules: number;
-  level: string;
-  benefits: string[];
-  hotmartLink: string;
+import { z } from "zod";
+import { BaseModel } from "./base.Entity";
+
+export const CourseSchema = z
+  .object({
+    id: z.string().uuid(),
+    title: z.string(),
+    bgClass: z.string(),
+    description: z.string(),
+    duration: z.string(),
+    modules: z.number(),
+    level: z.string(),
+    benefits: z.array(z.string()),
+    hotmartLink: z.string(),
+  })
+  .partial({
+    id: true,
+  });
+export class CourseEntity extends BaseModel {
+  public title: string;
+  public bgClass: string;
+  public description: string;
+  public duration: string;
+  public modules: number;
+  public level: string;
+  public benefits: string[];
+  public hotmartLink: string;
+
+  constructor(props: Omit<CourseEntity, "id">, id?: string) {
+    super(props, CourseSchema.shape, id);
+  }
 }
