@@ -5,7 +5,8 @@ export const CourseSchema = z
   .object({
     id: z.string().uuid(),
     title: z.string(),
-    bgClass: z.string(),
+    bgClass: z.string().nullable().optional(),
+    imageUrl: z.string().nullable().optional(),
     description: z.string(),
     duration: z.string(),
     modules: z.number(),
@@ -18,7 +19,8 @@ export const CourseSchema = z
   });
 export class CourseEntity extends BaseModel {
   public title: string;
-  public bgClass: string;
+  public bgClass: string | null;
+  public imageUrl: string | null;
   public description: string;
   public duration: string;
   public modules: number;

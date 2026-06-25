@@ -58,6 +58,7 @@ export class MapperRepository {
       {
         title: course.title,
         bgClass: course.bgClass,
+        imageUrl: course.imageUrl,
         description: course.description,
         duration: course.duration,
         modules: course.modules,
