@@ -6,7 +6,7 @@ generator client {
 // Configuração da conexão com o MySQL no Docker
 datasource db {
   provider = "mysql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 // Modelo de Perfil de Autor
@@ -47,7 +47,7 @@ model posts {
   publication_date DateTime?  @default(now()) @db.DateTime(0)
   authorId         Int
   categorieId      Int
-  imageUrl         String?      @db.VarChar(500)
+  imageUrl         String?    @db.VarChar(500)
   comments         comments[]
   users            users      @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
   categories       categories @relation(fields: [categorieId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_2")
@@ -58,30 +58,32 @@ model posts {
 
 // Modelo de Usuários
 model users {
-  id            Int            @id @default(autoincrement())
-  name          String         @db.VarChar(100)
-  email         String         @unique(map: "email") @db.VarChar(100)
-  password      String         @db.VarChar(255)
-  type          users_type?    @default(leitor)
-  data_criacao  DateTime?      @default(now()) @db.DateTime(0)
+  id           Int         @id @default(autoincrement())
+  name         String      @db.VarChar(100)
+  email        String      @unique(map: "email") @db.VarChar(100)
+  password     String      @db.VarChar(255)
+  type         users_type? @default(leitor)
+  data_criacao DateTime?   @default(now()) @db.DateTime(0)
 
-  verificationCodeHash    String?   @db.VarChar(255)
-  verificationExpiredAt   DateTime? @db.DateTime(0)
-  isVerified              Boolean   @default(false) 
-     
+  verificationCodeHash  String?   @db.VarChar(255)
+  verificationExpiredAt DateTime? @db.DateTime(0)
+  isVerified            Boolean   @default(false)
+
   authorprofile authorprofile?
   comments      comments[]
   posts         posts[]
 }
+
 model Course {
   id          String          @id @default(uuid())
   title       String
-  bgClass     String
+  bgClass     String?
+  imageUrl    String?         @db.VarChar(500)
   description String
   duration    String
   modules     Int
   level       String
-  benefits    CourseBenefit[] 
+  benefits    CourseBenefit[]
   hotmartLink String
 }
 

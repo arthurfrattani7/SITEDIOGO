@@ -10,7 +10,12 @@ export class CreateCourseRequestDto {
   @ApiProperty({ example: 'bg-blue-600', description: 'Classe CSS do background do card' })
   @IsString({ message: 'A classe de background deve ser um texto' })
   @IsNotEmpty({ message: 'A classe de background é obrigatória' })
-  bgClass: string;
+  bgClass: string | null;
+
+  @ApiProperty({ example: 'https://example.com/images/course-image.jpg', description: 'URL da imagem do curso' })
+  @IsString({ message: 'A URL da imagem deve ser um texto' })
+  @IsNotEmpty({ message: 'A URL da imagem é obrigatória' })
+  imageUrl: string | null;
 
   @ApiProperty({ example: 'Domine todos os conceitos de atos administrativos...', description: 'Descrição detalhada do curso' })
   @IsString({ message: 'A descrição deve ser um texto' })

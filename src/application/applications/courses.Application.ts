@@ -24,6 +24,7 @@ export class CoursesApplication {
     const courseEntity = new CourseEntity({
       title: data.title,
       bgClass: data.bgClass,
+      imageUrl: data.imageUrl,
       description: data.description,
       duration: data.duration,
       modules: data.modules,

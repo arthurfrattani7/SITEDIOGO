@@ -92,4 +92,41 @@ export class UploadController {
     }
     return res.sendFile(imagePath);
   }
+
+  @Post("course")
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("autor", "admin")
+  @ApiOperation({ summary: "Faz o upload de uma imagem vinculada a um Curso" })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        courseId: { type: "string", description: "ID do curso (UUID)" },
+        file: { type: "string", format: "binary" },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor("file"))
+  async uploadCourseImage(
+    @Body("courseId") courseId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.uploadApplication.uploadCourseImage(courseId, file);
+  }
+
+  @Get("courses/:imageName")
+  @ApiOperation({
+    summary: "Visualiza uma imagem de curso pelo nome do arquivo",
+  })
+  @ApiParam({ name: "imageName", description: "Nome do arquivo arquivo salvo" })
+  getCourseImage(@Param("imageName") imageName: string, @Res() res: Response) {
+    const imagePath = join(process.cwd(), "uploads", "courses", imageName);
+
+    if (!existsSync(imagePath)) {
+      throw new NotFoundException("Imagem não encontrada.");
+    }
+    return res.sendFile(imagePath);
+  }
 }

@@ -32,6 +32,7 @@ export class CoursesRepository {
       data: {
         title: data.title,
         bgClass: data.bgClass,
+        imageUrl: data.imageUrl,
         description: data.description,
         duration: data.duration,
         modules: data.modules,
@@ -55,6 +56,7 @@ export class CoursesRepository {
       data: {
         title: data.title,
         bgClass: data.bgClass,
+        imageUrl: data.imageUrl,
         description: data.description,
         duration: data.duration,
         modules: data.modules,

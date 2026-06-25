@@ -18,7 +18,8 @@ export interface ICourseBenefitFromDb {
 export interface ICourseFromDb {
   id: string;
   title: string;
-  bgClass: string;
+  bgClass: string | null;
+  imageUrl: string | null;
   description: string;
   duration: string;
   modules: number;

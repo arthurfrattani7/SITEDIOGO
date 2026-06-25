@@ -20,6 +20,12 @@ export class CourseResponseDto {
   bgClass: string;
 
   @ApiProperty({ 
+    example: 'https://example.com/images/course-image.jpg', 
+    description: 'URL da imagem representativa do curso' 
+  })
+  imageUrl: string;
+
+  @ApiProperty({ 
     example: 'Domine todos os conceitos de atos administrativos, licitações e contratos públicos focados para concursos.', 
     description: 'Descrição detalhada e ementa resumida do curso' 
   })
